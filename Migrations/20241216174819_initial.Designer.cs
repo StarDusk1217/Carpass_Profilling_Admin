@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carpass_Profilling.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241209183337_Initial")]
-    partial class Initial
+    [Migration("20241216174819_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

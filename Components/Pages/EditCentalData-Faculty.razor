@@ -1,98 +1,97 @@
-﻿@page "/edit-faculty"
-@page "/edit-faculty/{Id:int}"
-@inject IApplicantService ApplicantService
+﻿@page "/edit-centraldata-faculty"
+@page "/edit-centraldata-faculty/{Id:int}"
+@inject ICentralDataService CentralDataService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
-@inject ISchoolYearService SchoolYearService
 @using SixLabors.ImageSharp;
 @using SixLabors.ImageSharp.Formats.Jpeg;
 @using SixLabors.ImageSharp.Processing;
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<EditForm Model="CurrentApplicant" OnValidSubmit="HandleSubmit">
+<EditForm Model="CurrentCentralData" OnValidSubmit="HandleSubmit">
     <div class="background-wrapper">
-        <div class="container  h-100">
+        <div class="container py-5 h-100" style="background-color: floralwhite;">
             <div class="row">
                 <div class="col-12">
                     <div class="card" style="border-top: 5px solid #c0c0c0; border-bottom: 5px solid #c0c0c0;">
                         <div class="card-body" style="background-color: #0D92F4; ">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h3 class="mb-4">Faculty Registration Form</h3>
+                                    <h3 class="mb-4">Registration Form</h3>
                                     <div class="mb-3">
                                         <label for="fullname" class="form-label">Name of Applicant *</label>
-                                        <InputText id="fullname" class="form-control form-control-lg" @bind-Value="CurrentApplicant.fullName" required @onblur="ValidateFields" maxlength="100"></InputText>
-                                        <ValidationMessage For="@(() => CurrentApplicant.fullName)" />
+                                        <InputText id="fullname" class="form-control form-control-lg" @bind-Value="CurrentCentralData.fullname" required @onblur="ValidateFields" maxlength="100" />
+                                        <ValidationMessage For="@(() => CurrentCentralData.fullname)" />
                                         <span class="text-danger">@FullNameValidationMessage</span>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="type" class="form-label">Type of Applicant *</label>
-                                            <InputSelect id="type" class="form-select" @bind-Value="CurrentApplicant.type_Applicant" required>
+                                            <InputSelect id="type" class="form-select" @bind-Value="CurrentCentralData.type_applicant" required>
                                                 @foreach (var type in type_Applicant)
                                                 {
                                                     <option value="@type">@type</option>
                                                 }
                                             </InputSelect>
-                                            <ValidationMessage For="@(() => CurrentApplicant.type_Applicant)" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.type_applicant)" />
                                             <span class="text-danger">@TypeApplicantValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="type" class="form-label">Type of Car Pass *</label>
-                                            <InputSelect id="type" class="form-select" @bind-Value="CurrentApplicant.type_Carpass" required>
+                                            <InputSelect id="type" class="form-select" @bind-Value="CurrentCentralData.type_carpass" required>
                                                 @foreach (var type in type_Carpass)
                                                 {
                                                     <option value="@type">@type</option>
                                                 }
                                             </InputSelect>
-                                            <ValidationMessage For="@(() => CurrentApplicant.type_Carpass)" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.type_carpass)" />
                                             <span class="text-danger">@TypeCarpassValidationMessage</span>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="studentname" class="form-label">Name of Student</label>
-                                            <InputText id="studentname" class="form-control form-control-lg" placeholder="If applicable" @bind-Value="CurrentApplicant.name_Student" maxlength="100"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.name_Student)" />
+                                            <InputText id="studentname" class="form-control" placeholder="If applicable" @bind-Value="CurrentCentralData.name_student" maxlength="100" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.name_student)" />
                                             <span class="text-danger">@NameStudentValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="course" class="form-label">Course/Grade & Level *</label>
-                                            <InputText id="course" class="form-control form-control-lg" @bind-Value="CurrentApplicant.course_Grade" required maxlength="50"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.course_Grade)" />
+                                            <InputText id="course" class="form-control" @bind-Value="CurrentCentralData.course_grade" required maxlength="50" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.course_grade)" />
                                             <span class="text-danger">@CourseGradeValidationMessage</span>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="relation" class="form-label">Applicant Relationship *</label>
-                                            <InputText id="relation" class="form-control form-control-lg" placeholder="If applicable" @bind-Value="CurrentApplicant.app_Relation" required maxlength="30"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.app_Relation)" />
+                                            <InputText id="relation" class="form-control" @bind-Value="CurrentCentralData.app_relation" required maxlength="30" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.app_relation)" />
                                             <span class="text-danger">@AppRelationValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="contact" class="form-label">Contact Number *</label>
-                                            <InputText id="contact" class="form-control form-control-lg" @bind-Value="CurrentApplicant.app_Contact" required maxlength="11" pattern="^\d{11}$" title="Contact number must be 11 digits"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.app_Contact)" />
+                                            <InputText id="contact" class="form-control" @bind-Value="CurrentCentralData.app_contact" required pattern="^\d{11}$" title="Contact number must be 11 digits" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.app_contact)" />
                                             <span class="text-danger">@AppContactValidationMessage</span>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="homead" class="form-label">Home Address *</label>
-                                        <InputText id="homead" class="form-control form-control-lg" @bind-Value="CurrentApplicant.home_Ad" required maxlength="200"></InputText>
-                                        <ValidationMessage For="@(() => CurrentApplicant.home_Ad)" />
+                                        <InputText id="homead" class="form-control" @bind-Value="CurrentCentralData.home_ad" required maxlength="200" />
+                                        <ValidationMessage For="@(() => CurrentCentralData.home_ad)" />
                                         <span class="text-danger">@HomeAdValidationMessage</span>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="veowner" class="form-label">Name of Vehicle Owner *</label>
-                                            <InputText id="veowner" class="form-control form-control-lg" @bind-Value="CurrentApplicant.ve_Owner" required @onblur="ValidateFields" maxlength="100"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.ve_Owner)" />
+                                            <InputText id="veowner" class="form-control" @bind-Value="CurrentCentralData.ve_owner" required @onblur="ValidateFields" maxlength="100" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ve_owner)" />
                                             <span class="text-danger">@VeOwnerValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="verelation" class="form-label">Vehicle Owner's Relationship</label>
-                                            <InputText id="verelation" class="form-control form-control-lg" placeholder="If he/she is not the owner" @bind-Value="CurrentApplicant.ve_Relation" @onblur="ValidateFields" disabled="@IsVehicleOwnerRelationDisabled" maxlength="50"></InputText>
+                                            <InputText id="verelation" class="form-control" placeholder="If not the owner" @bind-Value="CurrentCentralData.ve_relation" @onblur="ValidateFields" disabled="@IsVehicleOwnerRelationDisabled" maxlength="50" />
                                         </div>
                                     </div>
                                 </div>
@@ -101,52 +100,66 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="veplate" class="form-label">Vehicle Plate Number *</label>
-                                            <InputText id="veplate" class="form-control form-control-lg" @bind-Value="CurrentApplicant.ve_PlateNO" placeholder="AGA8726" pattern="^[A-Z0-9]+$" title="Plate number must be alphanumeric"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.ve_PlateNO)" />
+                                            <InputText id="veplate" class="form-control" @bind-Value="CurrentCentralData.ve_plateno" pattern="^[A-Z0-9]+$" title="Plate number must be alphanumeric" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ve_plateno)" />
                                             <span class="text-danger">@VePlateNOValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="brand" class="form-label">Vehicle Make (Brand) *</label>
-                                            <InputText id="brand" class="form-control form-control-lg" placeholder="Brand" @bind-Value="CurrentApplicant.ve_Brand" required maxlength="50"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.ve_Brand)" />
+                                            <InputText id="brand" class="form-control" @bind-Value="CurrentCentralData.ve_brand" required maxlength="50" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ve_brand)" />
                                             <span class="text-danger">@VeBrandValidationMessage</span>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="vetype" class="form-label">Vehicle Type *</label>
-                                        <InputSelect id="vetype" class="form-select" @bind-Value="CurrentApplicant.ve_Type" required>
+                                        <InputSelect id="vetype" class="form-select" @bind-Value="CurrentCentralData.ve_type" required>
                                             @foreach (var type in vehicleTypes)
                                             {
                                                 <option value="@type">@type</option>
                                             }
                                         </InputSelect>
-                                        <ValidationMessage For="@(() => CurrentApplicant.ve_Type)" />
+                                        <ValidationMessage For="@(() => CurrentCentralData.ve_type)" />
                                         <span class="text-danger">@VeTypeValidationMessage</span>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="series" class="form-label">Vehicle Series (Model) *</label>
-                                            <InputText id="series" class="form-control form-control-lg" placeholder="Model" @bind-Value="CurrentApplicant.ve_Series" required maxlength="50"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.ve_Series)" />
+                                            <InputText id="series" class="form-control" @bind-Value="CurrentCentralData.ve_series" required maxlength="50" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ve_series)" />
                                             <span class="text-danger">@VeSeriesValidationMessage</span>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="color" class="form-label">Vehicle Color *</label>
-                                            <InputText id="color" class="form-control form-control-lg" @bind-Value="CurrentApplicant.ve_Color" required maxlength="50"></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.ve_Color)" />
+                                            <InputText id="color" class="form-control" @bind-Value="CurrentCentralData.ve_color" required maxlength="50" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ve_color)" />
                                             <span class="text-danger">@VeColorValidationMessage</span>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <label for="schoolYear" class="form-label">School Year</label>
-                                            <InputText id="schoolYear" class="form-control form-control-lg" @bind-Value="CurrentApplicant.schoolyear" readonly></InputText>
-                                            <ValidationMessage For="@(() => CurrentApplicant.schoolyear)" />
-                                            <span class="text-danger">@SchoolYearValidationMessage</span>
+                                            <label for="carpass" class="form-label">Carpass No. *</label>
+                                            <InputText id="carpass" class="form-control" @bind-Value="CurrentCentralData.carpass_no" required maxlength="10" pattern="^[A-Z0-9]+$" title="Carpass No must be alphanumeric" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.carpass_no)" />
+                                            <span class="text-danger">@CarPassNOValidationMessage</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="refnumber" class="form-label">Receipt Ref. No *</label>
+                                            <InputText id="refnumber" class="form-control" @bind-Value="CurrentCentralData.ref_number" required maxlength="6" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.ref_number)" />
+                                            <span class="text-danger">@ReferenceNumberValidationMessage</span>
                                         </div>
                                     </div>
-
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="issuedby" class="form-label">Issued By *</label>
+                                            <InputText id="issuedby" class="form-control" @bind-Value="CurrentCentralData.issued_by" required maxlength="50" />
+                                            <ValidationMessage For="@(() => CurrentCentralData.issued_by)" />
+                                            <span class="text-danger">@IssuedByValidationMessage</span>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div>
                                     <div class="container-fluid px-4 py-3">
                                         <div class="row">
@@ -221,11 +234,10 @@
                                             <span class="text-danger" style="font-size: 16px; margin-left: 20px;">@TermsValidationMessage</span>
                                         </div>
                                     </div>
+                                    <button type="button" class="btn btn-secondary ms-2" @onclick="NavigateBack">
+                                        Back
+                                    </button>
 
-                                    @if (Id != null)
-                                    {
-                                        <button type="button" class="btn btn-secondary ms-2" @onclick="NavigateBack">Back</button>
-                                    }
                                 </div>
                             </div>
                         </div>
@@ -236,13 +248,12 @@
     </div>
 </EditForm>
 
+@if (ShowCentralDataModal)
+{
+    <CentralDataModal CurrentCentralData="@CurrentCentralData" ShowModal="ShowCentralDataModal" OnProceed="HandleSubmit" OnDone="HandleDone" />
+}
 
 <style>
-    .container-custom {
-        background-color: #ffe4e1;
-        /* Add any other styles you need */
-    }
-
     .footer {
         text-align: center;
         margin-top: 20px;
@@ -253,62 +264,15 @@
         color: darkgrey;
         background-color: #25337a;
     }
-
-    .required-field::after {
-        content: " *";
-        color: red;
-    }
-
-    /* Add this to your CSS file */
-    .modal-header-red {
-        background-color: red;
-    }
-
-    .modal-title-white {
-        color: white;
-    }
-
-    .btn-close-white {
-        filter: invert(1);
-    }
 </style>
-
-@if (ShowPreviewModal)
-{
-    <PreviewModal CurrentApplicant="@CurrentApplicant" ShowModal="ShowPreviewModal" OnProceed="HandleSubmit" OnDone="HandleDone" />
-}
-
-@if (ShowDuplicateLicensePlateModal)
-{
-    <div class="modal show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-red">
-                    <h5 class="modal-title modal-title-white">Duplicate License Plate</h5>
-                    <button type="button" class="btn-close btn-close-white" @onclick="CloseDuplicateLicensePlateModal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <br />
-                    <h5 class="mb-4">An existing license plate has been registered.</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseDuplicateLicensePlateModal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 
 @code {
     [Parameter]
     public int? Id { get; set; }
 
-    public Applicant CurrentApplicant { get; set; } = new();
+    public Central_Data CurrentCentralData { get; set; } = new Central_Data();
 
-
-    private bool ShowApplicantTypeModal { get; set; } = false;
-    private bool ShowPreviewModal { get; set; }
-    private bool ShowDuplicateLicensePlateModal { get; set; } = false;
+    private bool ShowCentralDataModal { get; set; }
     private string FullNameValidationMessage { get; set; }
     private string TypeApplicantValidationMessage { get; set; }
     private string TypeCarpassValidationMessage { get; set; }
@@ -324,7 +288,9 @@
     private string VeTypeValidationMessage { get; set; }
     private string VeSeriesValidationMessage { get; set; }
     private string VeColorValidationMessage { get; set; }
-    private string SchoolYearValidationMessage { get; set; }
+    private string CarPassNOValidationMessage { get; set; }
+    private string ReferenceNumberValidationMessage { get; set; }
+    private string IssuedByValidationMessage { get; set; }
     private string TermsValidationMessage { get; set; }
 
     private bool IsVehicleOwnerRelationDisabled { get; set; } = false;
@@ -367,25 +333,12 @@
     {
         if (Id is not null)
         {
-            var applicant = await ApplicantService.GetApplicantsByIdAsync((int)Id);
-            if (applicant is not null)
+            var central_data = await CentralDataService.GetCentral_DatasByIdAsync((int)Id);
+            if (central_data is not null)
             {
-                CurrentApplicant = applicant;
+                CurrentCentralData = central_data;
             }
         }
-        else
-        {
-            CurrentApplicant = new Applicant();
-        }
-
-        // Retrieve the school year and set it to the CurrentApplicant
-        CurrentApplicant.schoolyear = await SchoolYearService.GetSchoolYearAsync();
-    }
-
-    private async Task<bool> IsLicensePlateDuplicate(string licensePlate)
-    {
-        var existingApplicants = await ApplicantService.GetAllApplicantsAsync();
-        return existingApplicants.Any(a => a.ve_PlateNO == licensePlate);
     }
 
     async Task HandleSubmit()
@@ -397,51 +350,37 @@
 
         if (Id is not null)
         {
-            await ApplicantService.UpdateApplicantsAsync(CurrentApplicant, (int)Id);
+            await CentralDataService.UpdateCentral_DatasAsync(CurrentCentralData, (int)Id);
         }
         else
         {
-            await ApplicantService.AddApplicantsAsync(CurrentApplicant);
+            await CentralDataService.AddCentral_DatasAsync(CurrentCentralData);
         }
         // Don't navigate away yet, let the confirmation modal handle it
     }
 
     void HandleModalStateChanged(bool showModal)
     {
-        ShowPreviewModal = showModal;
+        ShowCentralDataModal = showModal;
     }
 
     async Task OnSubmit()
     {
         if (ValidateForm())
         {
-            if (Id == null && await IsLicensePlateDuplicate(CurrentApplicant.ve_PlateNO))
-
-            {
-
-                ShowDuplicateLicensePlateModal = true;
-            }
-            else
-            {
-                ShowPreviewModal = true;
-            }
+            ShowCentralDataModal = true;
         }
-    }
-
-    void CloseDuplicateLicensePlateModal()
-    {
-        ShowDuplicateLicensePlateModal = false;
     }
 
     void HandleDone()
     {
         // Navigate to a new registration form
-        NavigationManager.NavigateTo("/applicants", forceLoad: false);
+        NavigationManager.NavigateTo("/central_datas", forceLoad: false);
     }
 
     void NavigateBack()
     {
-        NavigationManager.NavigateTo("/applicants");
+        NavigationManager.NavigateTo("/central_datas");
     }
 
     bool ValidateForm()
@@ -462,77 +401,96 @@
         VeTypeValidationMessage = string.Empty;
         VeSeriesValidationMessage = string.Empty;
         VeColorValidationMessage = string.Empty;
+        CarPassNOValidationMessage = string.Empty;
+        ReferenceNumberValidationMessage = string.Empty;
+        IssuedByValidationMessage = string.Empty;
         TermsValidationMessage = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.fullName))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.fullname))
         {
             FullNameValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.type_Applicant))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.type_applicant))
         {
             TypeApplicantValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.type_Carpass))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.type_carpass))
         {
             TypeCarpassValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.course_Grade))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.course_grade))
         {
             CourseGradeValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.app_Contact))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.app_contact))
         {
             AppContactValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.home_Ad))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.home_ad))
         {
             HomeAdValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_Owner))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_owner))
         {
             VeOwnerValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_PlateNO))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_plateno))
         {
             VePlateNOValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_Brand))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_brand))
         {
             VeBrandValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_Type))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_type))
         {
             VeTypeValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_Series))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_series))
         {
             VeSeriesValidationMessage = "Required.";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(CurrentApplicant.ve_Color))
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ve_color))
         {
             VeColorValidationMessage = "Required.";
+            isValid = false;
+        }
+
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.carpass_no))
+        {
+            CarPassNOValidationMessage = "Required.";
+            isValid = false;
+        }
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.ref_number))
+        {
+            ReferenceNumberValidationMessage = "Required.";
+            isValid = false;
+        }
+        if (string.IsNullOrWhiteSpace(CurrentCentralData.issued_by))
+        {
+            IssuedByValidationMessage = "Required.";
             isValid = false;
         }
 
@@ -547,7 +505,7 @@
 
     void ValidateFields()
     {
-        IsVehicleOwnerRelationDisabled = CurrentApplicant.fullName == CurrentApplicant.ve_Owner;
+        IsVehicleOwnerRelationDisabled = CurrentCentralData.fullname == CurrentCentralData.ve_owner;
     }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e, string docType)
@@ -593,25 +551,25 @@
                 switch (docType)
                 {
                     case "doc1":
-                        CurrentApplicant.Doc1 = buffer;
+                        CurrentCentralData.Doc1 = buffer;
                         break;
                     case "doc2":
-                        CurrentApplicant.Doc2 = buffer;
+                        CurrentCentralData.Doc2 = buffer;
                         break;
                     case "doc3":
-                        CurrentApplicant.Doc3 = buffer;
+                        CurrentCentralData.Doc3 = buffer;
                         break;
                     case "doc4":
-                        CurrentApplicant.Doc4 = buffer;
+                        CurrentCentralData.Doc4 = buffer;
                         break;
                     case "doc5":
-                        CurrentApplicant.Doc5 = buffer;
+                        CurrentCentralData.Doc5 = buffer;
                         break;
                     case "doc6":
-                        CurrentApplicant.Doc6 = buffer;
+                        CurrentCentralData.Doc6 = buffer;
                         break;
                     case "doc7":
-                        CurrentApplicant.Doc7 = buffer;
+                        CurrentCentralData.Doc7 = buffer;
                         break;
                     default:
                         Console.WriteLine("Unknown document type.");
@@ -628,7 +586,5 @@
             Console.WriteLine("No file selected.");
         }
     }
-
-
 
 }

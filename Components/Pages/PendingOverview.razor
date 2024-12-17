@@ -502,8 +502,49 @@ else
 
     void EditPending(int id)
     {
-        NavigationManager.NavigateTo($"/edit-pending/{id}");
+        var pending = pendings.FirstOrDefault(p => p.pending_ID == id);
+        if (pending != null)
+        {
+            NavigateBasedOnApplicantType(pending.type_Applicant, id);
+        }
     }
+
+    void NavigateBasedOnApplicantType(string applicantType, int id)
+    {
+        // List of applicant types that should navigate to edit-applicant
+        var applicantTypesForEditApplicant = new List<string>
+    {
+        "Parents of CPU Student",
+        "Guardian of CPU Student",
+        "CPU Student",
+        "CPU Tenant",
+        "Other"
+    };
+
+        // List of applicant types that should navigate to edit-faculty
+        var applicantTypesForEditFaculty = new List<string>
+    {
+        "1st Vehicle Pass (Free)",
+        "2nd Vehicle Pass",
+        "3rd Vehicle Pass",
+        "4th Vehicle Pass"
+    };
+
+        if (applicantTypesForEditApplicant.Contains(applicantType))
+        {
+            NavigationManager.NavigateTo($"/edit-pending/{id}");
+        }
+        else if (applicantTypesForEditFaculty.Contains(applicantType))
+        {
+            NavigationManager.NavigateTo($"/edit-faculty-pending/{id}");
+        }
+        else
+        {
+            // Handle other types or show an error message
+            Console.WriteLine("Unknown applicant type.");
+        }
+    }
+
 
     void AddPending()
     {
